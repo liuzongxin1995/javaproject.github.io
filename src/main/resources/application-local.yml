@@ -1,0 +1,51 @@
+spring:
+  datasource:
+    url: jdbc:mysql://192.168.0.11:3306/store?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useSSL=false
+    username: root
+    password: ENC(qVW2mcHB5Wkbdn2NCk/g/AAwpnuaeqcu)
+    driver-class-name: com.mysql.jdbc.Driver
+    platform: mysql
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 5
+      max-active: 20
+  task:
+    scheduling:
+      pool:
+        size: 5
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      table-prefix:
+      id-type: auto
+
+jasypt:
+  encryptor:
+    password: zhnyxs
+
+logging:
+  level:
+     org.springframework.web: INFO
+     com.xingyi.goods: INFO
+
+
+# 文件访问路径前缀
+fileAccessUrlPrefix: http://192.168.0.11:8088/resources
+
+# 文件存储路径前缀
+#localPathPrefix: D:\assets
+localPathPrefix: /home/assets
+
+file:
+  # 文件访问路径前缀
+  accessUrlPrefix: http://192.168.0.11:8088/resources
+  # 文件存储路径前缀
+  localPathPrefix: /home/assets
+
+#外部接口调用路径
+url:
+  cOrdersUrl: http://localhost:8070/cOrders
