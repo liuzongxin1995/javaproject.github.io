@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/transinfo?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false
+    url: jdbc:mysql://localhost:3306/transinfo?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC
     username: root
-    password: ENC(w2YSgww0q2C4vQMKFU2VWg==)
+    password: root
     driver-class-name: com.mysql.jdbc.Driver
     platform: mysql
     type: com.alibaba.druid.pool.DruidDataSource
@@ -30,7 +30,7 @@ jasypt:
 logging:
   level:
      org.springframework.web: INFO
-     com.xingyi.goods: INFO
+     com.liu.javaproject: INFO
 
 
 # 文件访问路径前缀
