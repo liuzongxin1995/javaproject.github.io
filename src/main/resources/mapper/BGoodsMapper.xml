@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.javaproject.mapper.BGoodsMapper">
+
+    <select id="selectGoodsInfoById" resultType="com.liu.javaproject.model.dto.BGoodsDTO">
+        SELECT goods.*, CASE goods.goods_state WHEN '0' THEN '下架' WHEN '1' THEN '上架' END AS goods_state_info,
+               firstCategory.category_name AS firstCategoryName,
+               secondCategory.category_name AS secondCategoryName,
+               thirdCategory.category_name AS thirdCategoryName
+        FROM b_goods goods
+        LEFT JOIN b_goods_type firstCategory ON goods.first_category_id = firstCategory.category_id AND firstCategory.enabled = '1'
+        LEFT JOIN b_goods_type secondCategory ON goods.second_category_id = secondCategory.category_id AND secondCategory.enabled = '1'
+        LEFT JOIN b_goods_type thirdCategory ON goods.third_category_id = thirdCategory.category_id AND thirdCategory.enabled = '1'
+        WHERE goods_id = #{goodsId}
+    </select>
+
+    <select id="selectGoodsType" parameterType="com.liu.javaproject.model.dto.BGoodsDTO" resultType="java.util.HashMap">
+        SELECT DISTINCT category_id AS categoryId, category_name AS categoryName FROM b_goods_type
+        <where>
+            category_id in
+            <foreach collection="list" item="bGoods" separator="," open="(" close=")">
+                #{bGoods.firstCategoryId}, #{bGoods.secondCategoryId}, #{bGoods.thirdCategoryId}
+            </foreach>
+            AND enabled = '1'
+        </where>
+    </select>
+
+    <select id="selectGoodsInfoByQuery" parameterType="java.util.HashMap" resultType="com.liu.javaproject.model.dto.BGoodsDTO">
+        SELECT goods.pkno, goods.ctime AS ctime, goods.mtime AS mtime, goods.cuser AS cuser, goods.muser AS muser, goods.goods_id AS goods_id, goods.goods_name, goods.goods_short_name,
+               goods.first_category_id, goods.second_category_id, goods.third_category_id, goods.unit, goods.goods_bar_code, goods.goods_shelf_life, goods.spec,
+               goods.remark, goods.tax_rate, goods.goods_state, goods.goods_produce_place, goods.goods_produce_factory, goods.goods_weight, goods.goods_img,goods.is_key_goods,
+               CASE goods.goods_state WHEN '0' THEN '下架' WHEN '1' THEN '上架' END AS goods_state_info,
+               CASE goods.is_key_goods WHEN '0' THEN '非重点商品' WHEN '1' THEN '重点商品' END AS is_key_goods_info,
+               firstCategory.category_name AS firstCategoryName, secondCategory.category_name AS secondCategoryName,
+               thirdCategory.category_name AS thirdCategoryName
+        FROM b_goods goods
+        LEFT JOIN b_goods_type firstCategory ON goods.first_category_id = firstCategory.category_id AND firstCategory.enabled = '1'
+        LEFT JOIN b_goods_type secondCategory ON goods.second_category_id = secondCategory.category_id AND secondCategory.enabled = '1'
+        LEFT JOIN b_goods_type thirdCategory ON goods.third_category_id = thirdCategory.category_id AND thirdCategory.enabled = '1'
+        <where>
+            <if test="goodsId != null and goodsId != ''">
+                and goods.goods_id like "%"#{goodsId}"%"
+            </if>
+            <if test="goodsName != null and goodsName != ''">
+                and goods.goods_Name like "%"#{goodsName}"%"
+            </if>
+            <if test="goodsBarCode != null and goodsBarCode != ''">
+                and goods.goods_bar_code like "%"#{goodsBarCode}"%"
+            </if>
+            <if test="goodsProducePlace != null and goodsProducePlace != ''">
+                and goods.goods_produce_place like "%"#{goodsProducePlace}"%"
+            </if>
+            <if test="goodsProduceFactory != null and goodsProduceFactory != ''">
+                and goods.goods_produce_factory like "%"#{goodsProduceFactory}"%"
+            </if>
+            <if test="firstCategoryId != null and firstCategoryId != ''">
+                and goods.first_category_id = #{firstCategoryId}
+            </if>
+            <if test="firstCategoryName != null and firstCategoryName != ''">
+                and firstCategory.category_name like "%"#{firstCategoryName}"%"
+            </if>
+            <if test="secondCategoryId != null and secondCategoryId != ''">
+                and goods.second_category_id = #{secondCategoryId}
+            </if>
+            <if test="secondCategoryName != null and secondCategoryName != ''">
+                and secondCategory.category_name like "%"#{secondCategoryName}"%"
+            </if>
+            <if test="thirdCategoryId != null and thirdCategoryId != ''">
+                and goods.third_category_id = #{thirdCategoryId}
+            </if>
+            <if test="thirdCategoryName != null and thirdCategoryName != ''">
+                and thirdCategory.category_name like "%"#{thirdCategoryName}"%"
+            </if>
+            <if test="goodsState != null and goodsState != ''">
+                and goods.goods_state = #{goodsState}
+            </if>
+            <if test="isKeyGoods != null and isKeyGoods != ''">
+                and goods.is_key_goods = #{isKeyGoods}
+            </if>
+        </where>
+        ORDER BY
+        <if test="sortList!=null and sortList!=''">
+            ${sortList},
+        </if>
+        goods.ctime DESC
+    </select>
+
+    <select id="selectGoodsInfo" parameterType="com.liu.javaproject.model.BGoods" resultType="com.liu.javaproject.model.dto.BGoodsDTO">
+        SELECT b.pkno,b.ctime,b.mtime,b.cuser,b.muser,b.goods_id,b.goods_name,b.goods_short_name,b.first_category_id,
+        b.second_category_id,b.third_category_id,b.unit,b.goods_bar_code,b.goods_shelf_life,b.spec,b.remark,b.tax_rate,
+        b.goods_state,b.goods_produce_place,b.goods_produce_factory,b.goods_weight,b.goods_img,
+         CASE b.goods_state WHEN '0' THEN '下架' WHEN '1' THEN '上架' END AS goods_state_info,
+               firstCategory.category_name AS firstCategoryName,
+               secondCategory.category_name AS secondCategoryName,
+               thirdCategory.category_name AS thirdCategoryName
+        FROM b_goods b
+        LEFT JOIN b_goods_type firstCategory ON b.first_category_id = firstCategory.category_id AND firstCategory.enabled = '1'
+        LEFT JOIN b_goods_type secondCategory ON b.second_category_id = secondCategory.category_id AND secondCategory.enabled = '1'
+        LEFT JOIN b_goods_type thirdCategory ON b.third_category_id = thirdCategory.category_id AND thirdCategory.enabled = '1'
+        <where>
+            <if test="goodsId != null and goodsId != ''">
+                and b.goods_id = #{goodsId}
+            </if>
+            <if test="goodsBarCode != null and goodsBarCode != ''">
+                and b.goods_bar_code = #{goodsBarCode}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectGoodsInfoWithoutPrice" parameterType="java.util.HashMap" resultType="com.liu.javaproject.model.dto.BGoodsDTO">
+        SELECT goods.pkno, goods.ctime AS ctime, goods.mtime AS mtime, goods.cuser AS cuser, goods.muser AS muser, goods.goods_id AS goods_id, goods.goods_name, goods.goods_short_name,
+        goods.first_category_id, goods.second_category_id, goods.third_category_id, goods.unit, goods.goods_bar_code, goods.goods_shelf_life, goods.spec,
+        goods.remark, goods.tax_rate, goods.goods_state, goods.goods_produce_place, goods.goods_produce_factory, goods.goods_weight, goods.goods_img,
+        CASE goods.goods_state WHEN '0' THEN '下架' WHEN '1' THEN '上架' END AS goods_state_info,
+        firstCategory.category_name AS firstCategoryName, secondCategory.category_name AS secondCategoryName,
+        thirdCategory.category_name AS thirdCategoryName
+        FROM b_goods goods
+        LEFT JOIN b_goods_price price ON goods.goods_id = price.goods_id and price.is_delete = '0'
+        LEFT JOIN b_goods_type firstCategory ON goods.first_category_id = firstCategory.category_id AND firstCategory.enabled = '1'
+        LEFT JOIN b_goods_type secondCategory ON goods.second_category_id = secondCategory.category_id AND secondCategory.enabled = '1'
+        LEFT JOIN b_goods_type thirdCategory ON goods.third_category_id = thirdCategory.category_id AND thirdCategory.enabled = '1'
+        <where>
+            price.goods_id is null
+            <if test="goodsId != null and goodsId != ''">
+                and goods.goods_id like "%"#{goodsId}"%"
+            </if>
+            <if test="goodsName != null and goodsName != ''">
+                and goods.goods_Name like "%"#{goodsName}"%"
+            </if>
+            <if test="goodsBarCode != null and goodsBarCode != ''">
+                and goods.goods_bar_code like "%"#{goodsBarCode}"%"
+            </if>
+            <if test="goodsProducePlace != null and goodsProducePlace != ''">
+                and goods.goods_produce_place like "%"#{goodsProducePlace}"%"
+            </if>
+            <if test="goodsProduceFactory != null and goodsProduceFactory != ''">
+                and goods.goods_produce_factory like "%"#{goodsProduceFactory}"%"
+            </if>
+            <if test="firstCategoryId != null and firstCategoryId != ''">
+                and goods.first_category_id = #{firstCategoryId}
+            </if>
+            <if test="firstCategoryName != null and firstCategoryName != ''">
+                and firstCategory.category_name like "%"#{firstCategoryName}"%"
+            </if>
+            <if test="secondCategoryId != null and secondCategoryId != ''">
+                and goods.second_category_id = #{secondCategoryId}
+            </if>
+            <if test="secondCategoryName != null and secondCategoryName != ''">
+                and secondCategory.category_name like "%"#{secondCategoryName}"%"
+            </if>
+            <if test="thirdCategoryId != null and thirdCategoryId != ''">
+                and goods.third_category_id = #{thirdCategoryId}
+            </if>
+            <if test="thirdCategoryName != null and thirdCategoryName != ''">
+                and thirdCategory.category_name like "%"#{thirdCategoryName}"%"
+            </if>
+            <if test="goodsState != null and goodsState != ''">
+                and goods.goods_state = #{goodsState}
+            </if>
+        </where>
+        ORDER BY
+        <if test="sortList!=null and sortList!=''">
+            ${sortList},
+        </if>
+        goods.ctime DESC
+    </select>
+</mapper>

@@ -26,15 +26,15 @@ public class CommonQuery {
     @ApiModelProperty("排序列表")
     private String sortList;
 
-    public void setDefaultPageParam()
-    {
-        if (this.pageNo == null || this.pageNo < 1)
-        {
-            this.pageNo = 1;
-        }
-        if (this.pageSize == null || this.pageSize < 1)
-        {
-            this.pageSize = 10;
+    public void setDefaultPageParam(CommonQuery query){
+        if(query != null){
+            if (query.getPageNo() == null || query.getPageNo() < 1) {
+                this.pageNo = 1;
+            }
+            if (query.getPageSize() == null || query.getPageSize() < 1) {
+                this.pageSize = 10;
+            }
+
         }
     }
 

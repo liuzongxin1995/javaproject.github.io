@@ -29,6 +29,10 @@ public class BosConstants {
     public static final String IS_ENABLED_NO = "0";
     public static final String IS_ENABLED_YES = "1";
 
+    //是否为重点商品（0：非重点商品，1：重点商品）
+    public static final String IS_KEY_GOODS_NO = "0";
+    public static final String IS_KEY_GOODS_YES = "1";
+
     //标识
     public static final String IS_FALSE = "0";
     public static final String IS_TRUE = "1";
@@ -65,5 +69,24 @@ public class BosConstants {
     //类型 1-加油 2-加氢
     public static final String STATION_TYPE_OIL = "1";
     public static final String STATION_TYPE_HYDROGEN = "2";
+
+    //报警类型：1-液位仪报警；2-加油机超长加油；3-损益报警
+    public static final String ALARM_TYPE_ONE = "1";
+    public static final String ALARM_TYPE_TWO = "2";
+    public static final String ALARM_TYPE_THREE = "3";
+
+    //液位仪报警子类型；0-脱机；1-油水高超过等于；2-油水高低于等于；3-水高低于等于；4-泄漏状态异常;5-液位计油高和人工检尺之差大于
+    public static final String ALARM_TYPE_ONE_ZERO = "0";
+    public static final String ALARM_TYPE_ONE_ONE = "1";
+    public static final String ALARM_TYPE_ONE_TWO = "2";
+    public static final String ALARM_TYPE_ONE_THREE = "3";
+    public static final String ALARM_TYPE_ONE_FOUR = "4";
+    public static final String ALARM_TYPE_ONE_FIVE = "5";
+
+    //损益报警子类型：0-连续三天损耗率超过或等于；1-当日损耗率超过或等于；2-盘存超损率大于或等于
+    public static final String ALARM_TYPE_THREE_ZERO = "0";
+    public static final String ALARM_TYPE_THREE_ONE = "1";
+    public static final String ALARM_TYPE_THREE_TWO = "2";
+
 
 }

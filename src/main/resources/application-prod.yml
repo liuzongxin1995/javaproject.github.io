@@ -37,3 +37,6 @@ file:
   accessUrlPrefix: http://192.168.0.11:8088/resources
   # 文件存储路径前缀
   localPathPrefix: /home/assets
+
+  # 商品图片访问路径前缀
+  goodsImgAccessUrlPrefix: http://122.112.143.244/assets/
